@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="/colorizer.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    div#gradient div {
+      display: inline-block;
+      height: 100px;
+      width: calc(100vw / 360);
+    }
+
+    div#color-box {
+      height: 100px;
+      width: 100px;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', e => {
+      // let color = colorizer.color.hex('#f00')
+      // for (let i = 0; i < 360; i++) {
+      //   let div = document.createElement('div')
+      //   color = i > 0 ? color.adjustHue(1) : color
+      //   div.setAttribute('style', `background-color: ${color}`)
+      //   document.getElementById('gradient').appendChild(div)
+      // }
+      let cb = document.getElementById('color-box')
+      cb.setAttribute('style', 'background-color: ' + colorizer.color.rgb(166, 246, 124).toHSL())
+    })
+  </script>
+</head>
+
+<body>
+  <h1>A Simple Gradient</h1>
+  <div id="gradient"></div>
+
+  <div id="color-box"></div>
+</body>
+
+</html>
