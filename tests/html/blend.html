@@ -48,8 +48,8 @@
           let action = blend.value.charAt(0).toLowerCase() + blend.value.slice(1)
           worker.postMessage({
             img: ctx.getImageData(0, 0, 1200, 720),
-            dog: dogCanvas.getContext('2d').getImageData(0, 0, 1200, 720).data,
-            cat: catCanvas.getContext('2d').getImageData(0, 0, 1200, 720).data,
+            dog: dogCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
+            cat: catCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
             action: action
           })
         }

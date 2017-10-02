@@ -15,38 +15,54 @@ namespace colorizer.filters {
     }
 
     private _averageColor() {
-      let hsl = new Float32Array(this.dta.length)
-      let dest = new Float32Array(this.dta.length)
+
+      let sumRed = 0, sumGreen = 0, sumBlue = 0
+      let sum = 0, pixels = 0
+
       this.eachColor((col, idx) => {
-        hsl[idx] = col.h * 360
-        hsl[idx + 1] = col.s * 100
-        hsl[idx + 2] = col.l * 100
-        hsl[idx + 3] = col.a * 100
+        // sum += (col.rgbSum) / 3
+        sumRed += col.red
+        sumBlue += col.blue
+        sumGreen += col.green
+        sum += col.rgbSum
+        pixels++
       })
-      console.log(hsl)
 
-      let hist = new Float32Array(256);
-      let sum = 0;
+      let norm = sum / pixels
+      let avgRed = sumRed / norm
+      let avgGreen = sumGreen / norm
+      let avgBlue = sumBlue / norm
+      // let avg = sum / c
+      // let norm = 255 / sum
+      console.log(norm, sum, norm * 255)
+      console.log(sumRed, sumGreen, sumBlue)
+      console.log(avgRed, avgGreen, avgBlue)
+      this.eachColor((col, idx) => {
+        this.setColorAtIndex(idx, color.rgb(
+          (col.red * avgRed),
+          (col.green * avgGreen),
+          (col.blue * avgBlue)
+        ))
+      })
 
-      for (let i = 0; i < hsl.length; i++) {
-        hist[~~hsl[i]]++;
-        sum++;
-      }
+      // let hist = new Float32Array(256);
+      // let sum = 0;
 
-      let prev = hist[0];
-      for (let i = 1; i < 256; i++) {
-        prev = hist[i] += prev;
-      }
+      // for (var i = 0; i < this._dta.length; ++i) {
+      //   ++hist[~~this._dta[i]];
+      //   ++sum;
+      // }
 
-      let norm = 255 / sum;
-      for (let i = 0; i < hsl.length; i++) {
-        dest[i] = hist[~~hsl[i]] * norm;
-      }
+      // let prev = hist[0];
+      // for (let i = 1; i < 256; i++) {
+      //   prev = hist[i] += prev;
+      // }
 
-      for (let i = 0, n = dest.length; i < n; i += 4) {
-        let c = color.hsl(dest[i], dest[i + 1], dest[i + 2])
-        this.setColorAtIndex(i, c)
-      }
+      // let norm = 255 / sum;
+      // for (let i = 0; i < this._dta.length; i++) {
+      //   this._dta[i] = hist[~~this._dta[i]] * norm;
+      // }
+
     }
 
   }

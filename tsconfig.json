@@ -4,6 +4,8 @@
     "module": "amd",
     "strict": true,
     "removeComments": true,
+    "declaration": true,
+    "rootDir": "src",
     "outFile": "./lib/colorizer.js"
   },
   "include": [
