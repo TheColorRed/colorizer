@@ -39,7 +39,7 @@ namespace colorizer {
 
     private interpolateColor(color1: color, color2: color, factor?: number): color {
       factor = !factor ? 0.5 : factor
-      let result = color.rgb(
+      return color.rgb(
         Math.round(color1.r + factor * (color2.r - color1.r)),
         Math.round(color1.g + factor * (color2.g - color1.g)),
         Math.round(color1.b + factor * (color2.b - color1.b))
@@ -48,7 +48,7 @@ namespace colorizer {
       // for (var i = 0; i < 3; i++) {
       //   result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
       // }
-      return result;
+      // return result;
     }
 
     private initColors(colors: colorPoint[]) {
