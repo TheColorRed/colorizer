@@ -19,10 +19,17 @@ namespace colorizer {
     public get h(): number { return this._hsl.h }
     public get s(): number { return this._hsl.s }
     public get l(): number { return this._hsl.l }
+    public get hue(): number { return Math.round(this.h * 360) }
+    public get saturation(): number { return parseFloat((this.s * 100).toFixed(5)) }
+    public get luminance(): number { return parseFloat((this.l * 100).toFixed(5)) }
 
     // Get other values
     public get a(): number { return this._rgba.a }
     public get alpha(): number { return Math.round(this._rgba.a * 255) }
+
+    public get rgbMax(): number { return Math.max(this.red, this.green, this.blue) }
+    public get rgbMin(): number { return Math.min(this.red, this.green, this.blue) }
+    public get rgbSum(): number { return this.red + this.green + this.blue }
 
     /**
      * Create a color from rgb values
@@ -119,9 +126,9 @@ namespace colorizer {
      */
     public toHex() {
       return '#' +
-        this._componentToHex(Math.round(this.r * 255)) +
-        this._componentToHex(Math.round(this.g * 255)) +
-        this._componentToHex(Math.round(this.b * 255))
+        this._componentToHex(this.red) +
+        this._componentToHex(this.green) +
+        this._componentToHex(this.blue)
     }
 
     /**
@@ -131,11 +138,11 @@ namespace colorizer {
      * @memberof Color
      */
     public toRGBA() {
-      return `rgba(${Math.round(this.red)},${Math.round(this.green)},${Math.round(this.blue)},${Math.round(this.a)})`
+      return `rgba(${this.red},${this.green},${this.blue},${this.a})`
     }
 
     public toRGB() {
-      return `rgb(${Math.round(this.red)},${Math.round(this.green)},${Math.round(this.blue)})`
+      return `rgb(${this.red},${this.green},${this.blue})`
     }
 
     /**
@@ -145,7 +152,7 @@ namespace colorizer {
      * @memberof Color
      */
     public toHSL() {
-      return `hsl(${Math.round((this.h * 360))},${parseFloat((this.s * 100).toFixed(5))}%,${parseFloat((this.l * 100).toFixed(5))}%)`
+      return `hsl(${this.hue},${this.saturation}%,${this.luminance}%)`
     }
 
     /**
@@ -188,7 +195,6 @@ namespace colorizer {
         h = Math.abs(h - 360)
       else if (h < 0)
         h = Math.abs(360 - h)
-      // console.log(Math.round(h), this.s * 100, this.l * 100)
       return color.hsl(Math.round(h), this.s * 100, this.l * 100)
     }
 
