@@ -1,16 +1,9 @@
 namespace colorizer {
 
-  interface RGB {
-    r: number
-    g: number
-    b: number
-    a?: number
-  }
-
   export class color {
 
-    private _rgba: RGBA
-    private _hsl: HSL
+    private _rgba!: RGBA
+    private _hsl!: HSL
 
     // Get RGB values
     public get rgb(): RGBA { return this._rgba }
@@ -74,9 +67,9 @@ namespace colorizer {
      * Create a color from hsl values
      *
      * @static
-     * @param {number} h The hue of the color
-     * @param {number} s The saturation of the color
-     * @param {number} l The lightness of the color
+     * @param {number} h The hue of the color (between 0 and 360)
+     * @param {number} s The saturation of the color (between 0 and 100)
+     * @param {number} l The lightness of the color (between 0 and 100)
      * @returns {color}
      * @memberof Color
      */
@@ -88,6 +81,30 @@ namespace colorizer {
       c._rgba = RGBA.hslToRgb(h / 360, s / 100, l / 100)
       c._hsl = new HSL(h, s, l)
       return c
+    }
+
+
+    /**
+     * Parses a string into a usable color
+     *  * Hex: "#xxxxxx" or "#xxx"
+     *  * rgb: "rgb(r,g,b)" or "rgba(r,g,b,a)"
+     *  * hsl: "hsl(h,s,l)"
+     *
+     * @static
+     * @param {string} color
+     * @returns
+     * @memberof color
+     */
+    public static parse(color: string) {
+      color = color.trim().toLowerCase()
+      if (color.match(/^#/)) return this.hex(color)
+      else if (color.match(/^rgba?/)) {
+        let [r, g, b, a] = color.replace(/^rgba?|\(|\)/ig, '').split(',').map(i => parseInt(i.trim()))
+        return this.rgb(r, g, b, a)
+      } else if (color.match(/^hsl?/)) {
+        let [h, s, l] = color.replace(/^hsl|\(|\)/ig, '').split(',').map(i => parseInt(i.trim()))
+        return this.hsl(h, s, l)
+      }
     }
 
     public toString() {
@@ -139,7 +156,7 @@ namespace colorizer {
      * @memberof Color
      */
     public lighten(percentage: number) {
-      let l = clamp01(this.l + (percentage / 100))
+      let l = clamp01(this.l + (clamp(percentage, 0, 100) / 100))
       return color.hsl(this.h, this.s, l)
     }
 
@@ -151,17 +168,17 @@ namespace colorizer {
      * @memberof Color
      */
     public darken(percentage: number) {
-      let l = clamp01(this.l - (percentage / 100))
+      let l = clamp01(this.l - (clamp(percentage, 0, 100) / 100))
       return color.hsl(this.h, this.s, l)
     }
 
     public saturate(percentage: number) {
-      let s = clamp01(this.s - percentage)
+      let s = clamp01(this.s - clamp(percentage, 0, 100))
       return color.hsl(this.h, s, this.l)
     }
 
     public desaturate(percentage: number) {
-      let s = clamp01(this.s + percentage)
+      let s = clamp01(this.s + clamp(percentage, 0, 100))
       return color.hsl(this.h, s, this.l)
     }
 
@@ -225,7 +242,7 @@ namespace colorizer {
     public static get lightYellow(): color { return color.rgb(255, 255, 224); }
     public static get lemonChiffon(): color { return color.rgb(255, 250, 205); }
     public static get lightGoldenRodYellow(): color { return color.rgb(250, 250, 210); }
-    public static get papayWhip(): color { return color.rgb(255, 239, 213); }
+    public static get papayaWhip(): color { return color.rgb(255, 239, 213); }
     public static get moccasin(): color { return color.rgb(255, 228, 181); }
     public static get peachPuff(): color { return color.rgb(255, 218, 185); }
     public static get paleGoldenRod(): color { return color.rgb(238, 232, 170); }
@@ -301,7 +318,7 @@ namespace colorizer {
     public static get mediumBlue(): color { return color.rgb(0, 0, 205); }
     public static get darkBlue(): color { return color.rgb(0, 0, 139); }
     public static get navy(): color { return color.rgb(0, 0, 128); }
-    public static get midnighBlue(): color { return color.rgb(25, 25, 112); }
+    public static get midnightBlue(): color { return color.rgb(25, 25, 112); }
     public static get blueberry(): color { return color.rgb(79, 134, 247); }
 
     // Browns
@@ -359,92 +376,5 @@ namespace colorizer {
       return hex.length == 1 ? '0' + hex : hex
     }
 
-  }
-
-  class RGBA {
-    public readonly r: number
-    public readonly g: number
-    public readonly b: number
-    public readonly a: number
-
-    public constructor(r: number, g: number, b: number, a?: number) {
-      this.r = clamp01(r / 255)
-      this.g = clamp01(g / 255)
-      this.b = clamp01(b / 255)
-      this.a = clamp01(a || 1)
-    }
-
-    public static hexToRgb(hex: string): RGBA | null {
-      // Expand shorthand form (e.g. '03F') to full form (e.g. '0033FF')
-      let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
-      hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-        return r + r + g + g + b + b
-      })
-
-      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-      return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-        a: 1
-      } : null
-    }
-
-    public static hslToRgb(h: number, s: number, l: number): RGBA {
-      let r, g, b;
-
-      if (s == 0) {
-        r = g = b = l; // achromatic
-      } else {
-        let hue2rgb = function hue2rgb(p: number, q: number, t: number) {
-          if (t < 0) t += 1;
-          if (t > 1) t -= 1;
-          if (t < 1 / 6) return p + (q - p) * 6 * t;
-          if (t < 1 / 2) return q;
-          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-          return p;
-        }
-
-        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        let p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
-      }
-      return new RGBA(r * 255, g * 255, b * 255)
-    }
-  }
-
-  class HSL {
-    public readonly h: number
-    public readonly s: number
-    public readonly l: number
-
-    public constructor(h: number, s: number, l: number) {
-      this.h = clamp01(h / 360)
-      this.s = clamp01(s / 100)
-      this.l = clamp01(l / 100)
-    }
-
-    public static rgbToHsl(r: number, g: number, b: number) {
-      r /= 255, g /= 255, b /= 255
-      let max = Math.max(r, g, b), min = Math.min(r, g, b)
-      let h: number = 0, s: number, l: number = (max + min) / 2
-
-      if (max == min) {
-        h = s = 0 // achromatic
-      } else {
-        let d = max - min
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-        switch (max) {
-          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-          case g: h = (b - r) / d + 2; break;
-          case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6
-      }
-
-      return new HSL(h * 360, s * 100, l * 100)
-    }
   }
 }

@@ -1,6 +1,6 @@
 namespace colorizer {
 
-  enum BlendType {
+  export enum BlendType {
     Normal = 'normal', Lighten = 'lighten', Darken = 'darken', Multiply = 'multiply',
     Average = 'average', Add = 'add', Subtract = 'subtract', Difference = 'difference',
     Negation = 'negation', Screen = 'screen', Exclusion = 'exclusion', Overlay = 'overlay',
