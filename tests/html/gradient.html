@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/colorizer.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 500vh;
+      }
+
+      h1 {
+        position: fixed;
+        width: 100%;
+        text-align: center;
+        line-height: 90vh;
+        font-size: 10vh;
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', e => {
+        let grad = document.getElementById('gradient')
+        let h1 = document.querySelector('h1')
+
+        // Create two gradients each with 100 steps
+        let gradient1 = colorizer.gradient.between(colorizer.color.black, colorizer.color.white)
+        let gradient2 = colorizer.gradient.between(colorizer.color.rgb(255, 0, 0, 0), colorizer.color.black)
+
+        // Initialize the colors
+        setBackgroundColor()
+        // Update the colors on scroll
+        document.addEventListener('scroll', setBackgroundColor)
+
+        function setBackgroundColor() {
+          // Get the scroll offset
+          let offset = (window.innerHeight + window.scrollY) / document.body.offsetHeight
+          // Update the background color from gradient1
+          document.body.style.backgroundColor = gradient1.evaluate(offset)
+          // Update the text color from gradient2
+          h1.style.color = gradient2.evaluate(offset)
+        }
+      })
+    </script>
+  </head>
+
+  <body>
+    <h1>Simple Scrolling Gradient</h1>
+    <div id="gradient"></div>
+
+    <div id="color-box"></div>
+  </body>
+
+</html>
