@@ -1,4 +1,4 @@
-namespace colorizer {
+namespace colorshop {
   export class image {
     protected _imgdta: ImageData
     protected _dta: Uint8ClampedArray
@@ -12,11 +12,11 @@ namespace colorizer {
       this._dta = imageData.data
     }
 
-    public static createFilter(imgData: ImageData): ImageData {
-      let f = new filters.autoColor(imgData)
-      f.apply()
-      return f._imgdta
-    }
+    // public static createFilter(imgData: ImageData): ImageData {
+    //   let f = new filters.autoColor(imgData)
+    //   f.apply()
+    //   return f._imgdta
+    // }
 
     public setColorAtIndex(index: number, color: color) {
       this._dta[index] = color.red

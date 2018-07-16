@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="/colorizer.js"></script>
+    <script src="/colorshop.js"></script>
     <style>
       html,
       body {
@@ -26,17 +26,17 @@
       }
     </style>
     <script>
-      /// <reference path="../../lib/colorizer.d.ts"/>
+      /// <reference path="../../lib/colorshop.d.ts"/>
       document.addEventListener('DOMContentLoaded', e => {
-        let grad = new colorizer.gradient([
-          { offset: 0, color: colorizer.color.hex('#fff') },
-          { offset: 1, color: colorizer.color.hex('#000') }
+        let grad = new colorshop.gradient([
+          { offset: 0, color: colorshop.color.hex('#fff') },
+          { offset: 1, color: colorshop.color.hex('#000') }
         ])
 
         grad.evaluate(0.5)
 
         // // Create an initial color
-        // let color = colorizer.color.hex('#f00')
+        // let color = colorshop.color.hex('#f00')
         // // Get reference to the gradient element
         // let grad = document.getElementById('gradient')
 
@@ -53,11 +53,11 @@
         // // Get reference to the current color box
         // // Set the initial color to red
         // let cb = document.getElementById('color-box')
-        // cb.setAttribute('style', 'background-color: ' + colorizer.color.rgb(255, 0, 0).toHSL())
+        // cb.setAttribute('style', 'background-color: ' + colorshop.color.rgb(255, 0, 0).toHSL())
 
         // // When the mouse moves over the gradient update the color of the box
         // grad.addEventListener('mousemove', function (e) {
-        //   let color = colorizer.color.parse(e.target.style.backgroundColor)
+        //   let color = colorshop.color.parse(e.target.style.backgroundColor)
         //   cb.style.backgroundColor = color.toHex()
         // })
       })

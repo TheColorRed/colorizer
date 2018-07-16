@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "amd",
+    "module": "system",
     "strict": true,
-    "outFile": "./lib/colorizer.js",
+    "outFile": "./lib/colorshop.js",
     "declaration": true
   },
   "include": [

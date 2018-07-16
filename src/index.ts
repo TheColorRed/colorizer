@@ -1,11 +1,8 @@
-declare namespace colorizer { }
+declare namespace colorshop { }
 declare var module: any
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = colorizer
+  module.exports = colorshop
 } else if (typeof window !== 'undefined') {
-  (<any>window).colorizer = colorizer
+  (<any>window).colorshop = colorshop
 }
-
-// export * from './Color'
-// export * from './Blender'

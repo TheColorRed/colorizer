@@ -1,49 +1,49 @@
-namespace colorizer {
+namespace colorshop {
 
-  export enum BlendType {
-    Normal = 'normal', Lighten = 'lighten', Darken = 'darken', Multiply = 'multiply',
-    Average = 'average', Add = 'add', Subtract = 'subtract', Difference = 'difference',
-    Negation = 'negation', Screen = 'screen', Exclusion = 'exclusion', Overlay = 'overlay',
-    SoftLight = 'softLight', HardLight = 'hardLight', ColorDodge = 'colorDodge', ColorBurn = 'colorBurn',
-    LinearDodge = 'linearDodge', LinearBurn = 'linearBurn', LinearLight = 'linearLight',
-    VividLight = 'vividLight', PinLight = 'pinLight', HardMix = 'hardMix', Reflect = 'reflect',
-    Glow = 'glow', Phoenix = 'phoenix'
+  export enum blendType {
+    normal = 'normal', lighten = 'lighten', darken = 'darken', multiply = 'multiply',
+    average = 'average', add = 'add', subtract = 'subtract', difference = 'difference',
+    negation = 'negation', screen = 'screen', exclusion = 'exclusion', overlay = 'overlay',
+    softLight = 'softLight', hardLight = 'hardLight', colorDodge = 'colorDodge', colorBurn = 'colorBurn',
+    linearDodge = 'linearDodge', linearBurn = 'linearBurn', linearLight = 'linearLight',
+    vividLight = 'vividLight', pinLight = 'pinLight', hardMix = 'hardMix', reflect = 'reflect',
+    glow = 'glow', phoenix = 'phoenix'
   }
 
   export class blender {
-    public static normal(ca: color, cb: color): color { return this.blend(BlendType.Normal, ca, cb) }
-    public static lighten(ca: color, cb: color): color { return this.blend(BlendType.Lighten, ca, cb) }
-    public static darken(ca: color, cb: color): color { return this.blend(BlendType.Darken, ca, cb) }
-    public static multiply(ca: color, cb: color): color { return this.blend(BlendType.Multiply, ca, cb) }
+    public static normal(ca: color, cb: color): color { return this.blend(blendType.normal, ca, cb) }
+    public static lighten(ca: color, cb: color): color { return this.blend(blendType.lighten, ca, cb) }
+    public static darken(ca: color, cb: color): color { return this.blend(blendType.darken, ca, cb) }
+    public static multiply(ca: color, cb: color): color { return this.blend(blendType.multiply, ca, cb) }
 
-    public static average(ca: color, cb: color): color { return this.blend(BlendType.Average, ca, cb) }
-    public static add(ca: color, cb: color): color { return this.blend(BlendType.Add, ca, cb) }
-    public static subtract(ca: color, cb: color): color { return this.blend(BlendType.Subtract, ca, cb) }
-    public static difference(ca: color, cb: color): color { return this.blend(BlendType.Difference, ca, cb) }
+    public static average(ca: color, cb: color): color { return this.blend(blendType.average, ca, cb) }
+    public static add(ca: color, cb: color): color { return this.blend(blendType.add, ca, cb) }
+    public static subtract(ca: color, cb: color): color { return this.blend(blendType.subtract, ca, cb) }
+    public static difference(ca: color, cb: color): color { return this.blend(blendType.difference, ca, cb) }
 
-    public static negation(ca: color, cb: color): color { return this.blend(BlendType.Negation, ca, cb) }
-    public static screen(ca: color, cb: color): color { return this.blend(BlendType.Screen, ca, cb) }
-    public static exclusion(ca: color, cb: color): color { return this.blend(BlendType.Exclusion, ca, cb) }
-    public static overlay(ca: color, cb: color): color { return this.blend(BlendType.Overlay, ca, cb) }
+    public static negation(ca: color, cb: color): color { return this.blend(blendType.negation, ca, cb) }
+    public static screen(ca: color, cb: color): color { return this.blend(blendType.screen, ca, cb) }
+    public static exclusion(ca: color, cb: color): color { return this.blend(blendType.exclusion, ca, cb) }
+    public static overlay(ca: color, cb: color): color { return this.blend(blendType.overlay, ca, cb) }
 
-    public static softLight(ca: color, cb: color): color { return this.blend(BlendType.SoftLight, ca, cb) }
-    public static hardLight(ca: color, cb: color): color { return this.blend(BlendType.HardLight, ca, cb) }
-    public static colorDodge(ca: color, cb: color): color { return this.blend(BlendType.ColorDodge, ca, cb) }
-    public static colorBurn(ca: color, cb: color): color { return this.blend(BlendType.ColorBurn, ca, cb) }
+    public static softLight(ca: color, cb: color): color { return this.blend(blendType.softLight, ca, cb) }
+    public static hardLight(ca: color, cb: color): color { return this.blend(blendType.hardLight, ca, cb) }
+    public static colorDodge(ca: color, cb: color): color { return this.blend(blendType.colorDodge, ca, cb) }
+    public static colorBurn(ca: color, cb: color): color { return this.blend(blendType.colorBurn, ca, cb) }
 
-    public static linearDodge(ca: color, cb: color): color { return this.blend(BlendType.LinearDodge, ca, cb) }
-    public static linearBurn(ca: color, cb: color): color { return this.blend(BlendType.LinearBurn, ca, cb) }
-    public static linearLight(ca: color, cb: color): color { return this.blend(BlendType.LinearLight, ca, cb) }
+    public static linearDodge(ca: color, cb: color): color { return this.blend(blendType.linearDodge, ca, cb) }
+    public static linearBurn(ca: color, cb: color): color { return this.blend(blendType.linearBurn, ca, cb) }
+    public static linearLight(ca: color, cb: color): color { return this.blend(blendType.linearLight, ca, cb) }
 
-    public static vividLight(ca: color, cb: color): color { return this.blend(BlendType.VividLight, ca, cb) }
-    public static pinLight(ca: color, cb: color): color { return this.blend(BlendType.PinLight, ca, cb) }
-    public static hardMix(ca: color, cb: color): color { return this.blend(BlendType.HardMix, ca, cb) }
-    public static reflect(ca: color, cb: color): color { return this.blend(BlendType.Reflect, ca, cb) }
+    public static vividLight(ca: color, cb: color): color { return this.blend(blendType.vividLight, ca, cb) }
+    public static pinLight(ca: color, cb: color): color { return this.blend(blendType.pinLight, ca, cb) }
+    public static hardMix(ca: color, cb: color): color { return this.blend(blendType.hardMix, ca, cb) }
+    public static reflect(ca: color, cb: color): color { return this.blend(blendType.reflect, ca, cb) }
 
-    public static glow(ca: color, cb: color): color { return this.blend(BlendType.Glow, ca, cb) }
-    public static phoenix(ca: color, cb: color): color { return this.blend(BlendType.Phoenix, ca, cb) }
+    public static glow(ca: color, cb: color): color { return this.blend(blendType.glow, ca, cb) }
+    public static phoenix(ca: color, cb: color): color { return this.blend(blendType.phoenix, ca, cb) }
 
-    protected static blend(type: BlendType, ca: color, cb: color): color {
+    protected static blend(type: blendType, ca: color, cb: color): color {
       let r: number = (<any>BlendValue)[type](ca.red, cb.red)
       let g: number = (<any>BlendValue)[type](ca.green, cb.green)
       let b: number = (<any>BlendValue)[type](ca.blue, cb.blue)

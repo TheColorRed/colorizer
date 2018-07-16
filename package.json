@@ -1,14 +1,32 @@
 {
-    "name": "color",
-    "version": "1.0.0",
-    "description": "",
-    "main": "lib/index.js",
-    "scripts": {
-        "test": "node ./tests/index.js"
-    },
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "express": "^4.16.0"
-    }
+  "name": "colorshop",
+  "version": "0.0.2",
+  "description": "Manage, manipulate and export colors on a server or within a canvas",
+  "main": "lib/colorshop.js",
+  "scripts": {
+    "test": "node ./tests/index.js",
+    "prepublish": "rm -rf ./lib && tsc -p . && uglifyjs ./lib/colorshop.js -m -o ./lib/colorshop.min.js"
+  },
+  "keywords": [
+    "color",
+    "colour",
+    "colors",
+    "colours",
+    "gradient",
+    "blend",
+    "rgb",
+    "hsl",
+    "hex",
+    "browser",
+    "convert",
+    "manipulate",
+    "manage"
+  ],
+  "types": "lib/colorshop.d.ts",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.0",
+    "uglify-es": "^3.3.9"
+  }
 }

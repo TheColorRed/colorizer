@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Color Blender</title>
-  <script src="/colorizer.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', e => {
-      let worker = new Worker('workers/blend.js')
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color Blender</title>
+    <script src="/colorshop.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', e => {
+        let worker = new Worker('workers/blend.js')
 
-      /** @type {HTMLSelectElement} */
-      let blend = document.querySelector('#blend')
+        /** @type {HTMLSelectElement} */
+        let blend = document.querySelector('#blend')
 
-      /** @type {HTMLCanvasElement} */
-      let canvas = document.getElementById('image')
+        /** @type {HTMLCanvasElement} */
+        let canvas = document.getElementById('image')
 
-      canvas.width = 1200, canvas.height = 720
-      let ctx = canvas.getContext('2d')
+        canvas.width = 1200, canvas.height = 720
+        let ctx = canvas.getContext('2d')
 
-      let dogCanvas = document.createElement('canvas')
-      dogCanvas.width = 1200, dogCanvas.height = 720
-      let catCanvas = document.createElement('canvas')
-      catCanvas.width = 1200, catCanvas.height = 720
+        let dogCanvas = document.createElement('canvas')
+        dogCanvas.width = 1200, dogCanvas.height = 720
+        let catCanvas = document.createElement('canvas')
+        catCanvas.width = 1200, catCanvas.height = 720
 
-      worker.addEventListener('message', e => {
-        ctx.putImageData(e.data, 0, 0)
-        blend.disabled = false
-      })
-
-      let dog = new Image(1200, 720), cat = new Image(1200, 720)
-      dog.src = './img/dog.jpg'
-      dog.addEventListener('load', e => {
-        dogCanvas.getContext('2d').drawImage(dog, 0, 0, 1200, 720)
-        cat.src = './img/cat.jpg'
-        ctx.drawImage(dogCanvas, 0, 0)
-        cat.addEventListener('load', e => {
-          catCanvas.getContext('2d').drawImage(cat, 0, 0, 1200, 720)
-          ctx.drawImage(catCanvas, 0, 0)
+        worker.addEventListener('message', e => {
+          ctx.putImageData(e.data, 0, 0)
           blend.disabled = false
         })
-      })
-      blend.addEventListener('change', e => {
-        if (blend.value != '') {
-          blend.disabled = true
-          let action = blend.value.charAt(0).toLowerCase() + blend.value.slice(1)
-          worker.postMessage({
-            img: ctx.getImageData(0, 0, 1200, 720),
-            dog: dogCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
-            cat: catCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
-            action: action
+
+        let dog = new Image(1200, 720), cat = new Image(1200, 720)
+        dog.src = './img/dog.jpg'
+        dog.addEventListener('load', e => {
+          dogCanvas.getContext('2d').drawImage(dog, 0, 0, 1200, 720)
+          cat.src = './img/cat.jpg'
+          ctx.drawImage(dogCanvas, 0, 0)
+          cat.addEventListener('load', e => {
+            catCanvas.getContext('2d').drawImage(cat, 0, 0, 1200, 720)
+            ctx.drawImage(catCanvas, 0, 0)
+            blend.disabled = false
           })
-        }
+        })
+        blend.addEventListener('change', e => {
+          if (blend.value != '') {
+            blend.disabled = true
+            let action = blend.value.charAt(0).toLowerCase() + blend.value.slice(1)
+            worker.postMessage({
+              img: ctx.getImageData(0, 0, 1200, 720),
+              dog: dogCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
+              cat: catCanvas.getContext('2d').getImageData(0, 0, 1200, 720),
+              action: action
+            })
+          }
+        })
       })
-    })
-  </script>
-</head>
+    </script>
+  </head>
 
-<body>
+  <body>
 
-  <div style="margin-bottom: 20px">
-    Blend Mode:
-    <select id="blend" disabled>
-      <option value="Normal">Normal</option>
-      <option value="Lighten">Lighten</option>
-      <option value="Darken">Darken</option>
-      <option value="Multiply">Multiply</option>
-      <option value="Average">Average</option>
-      <option value="Add">Add</option>
-      <option value="Subtract">Subtract</option>
-      <option value="Difference">Difference</option>
-      <option value="Negation">Negation</option>
-      <option value="Screen">Screen</option>
-      <option value="Exclusion">Exclusion</option>
-      <option value="Overlay">Overlay</option>
-      <option value="SoftLight">Soft Light</option>
-      <option value="HardLight">Hard Light</option>
-      <option value="ColorDodge">Color Dodge</option>
-      <option value="ColorBurn">Color Burn</option>
-      <option value="LinearDodge">Linear Dodge</option>
-      <option value="LinearBurn">Linear Burn</option>
-      <option value="LinearLight">Linear Light</option>
-      <option value="VividLight">Vivid Light</option>
-      <option value="PinLight">Pin Light</option>
-      <option value="HardMix">Hard Mix</option>
-      <option value="Reflect">Reflect</option>
-      <option value="Glow">Glow</option>
-      <option value="Phoenix">Phoenix</option>
-    </select>
-  </div>
-  <div>
-    <canvas id="image"></canvas>
-  </div>
+    <div style="margin-bottom: 20px">
+      Blend Mode:
+      <select id="blend" disabled>
+        <option value="Normal">Normal</option>
+        <option value="Lighten">Lighten</option>
+        <option value="Darken">Darken</option>
+        <option value="Multiply">Multiply</option>
+        <option value="Average">Average</option>
+        <option value="Add">Add</option>
+        <option value="Subtract">Subtract</option>
+        <option value="Difference">Difference</option>
+        <option value="Negation">Negation</option>
+        <option value="Screen">Screen</option>
+        <option value="Exclusion">Exclusion</option>
+        <option value="Overlay">Overlay</option>
+        <option value="SoftLight">Soft Light</option>
+        <option value="HardLight">Hard Light</option>
+        <option value="ColorDodge">Color Dodge</option>
+        <option value="ColorBurn">Color Burn</option>
+        <option value="LinearDodge">Linear Dodge</option>
+        <option value="LinearBurn">Linear Burn</option>
+        <option value="LinearLight">Linear Light</option>
+        <option value="VividLight">Vivid Light</option>
+        <option value="PinLight">Pin Light</option>
+        <option value="HardMix">Hard Mix</option>
+        <option value="Reflect">Reflect</option>
+        <option value="Glow">Glow</option>
+        <option value="Phoenix">Phoenix</option>
+      </select>
+    </div>
+    <div>
+      <canvas id="image"></canvas>
+    </div>
 
-</body>
+  </body>
 
 </html>

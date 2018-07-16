@@ -1,4 +1,4 @@
-namespace colorizer {
+namespace colorshop {
   export class RGBA {
     public readonly r: number
     public readonly g: number
@@ -9,7 +9,7 @@ namespace colorizer {
       this.r = clamp01(r / 255)
       this.g = clamp01(g / 255)
       this.b = clamp01(b / 255)
-      this.a = clamp01(a || 1)
+      this.a = typeof a != 'undefined' ? clamp01(a) : 1
     }
 
     public static hexToRgb(hex: string): RGBA | null {
@@ -28,7 +28,7 @@ namespace colorizer {
       } : null
     }
 
-    public static hslToRgb(h: number, s: number, l: number): RGBA {
+    public static hslToRgb(h: number, s: number, l: number, a: number = 1): RGBA {
       let r, g, b;
 
       if (s == 0) {
@@ -49,7 +49,7 @@ namespace colorizer {
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1 / 3);
       }
-      return new RGBA(r * 255, g * 255, b * 255)
+      return new RGBA(r * 255, g * 255, b * 255, a)
     }
   }
 }

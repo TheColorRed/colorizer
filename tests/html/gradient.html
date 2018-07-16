@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="/colorizer.js"></script>
+    <script src="/colorshop.js"></script>
     <style>
       html,
       body {
@@ -22,15 +22,35 @@
         line-height: 90vh;
         font-size: 10vh;
       }
+
+      #gradient {
+        position: fixed;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      #gradient div {
+        display: inline-block;
+        height: 100px;
+        width: calc(100vw / 5000);
+      }
     </style>
     <script>
       document.addEventListener('DOMContentLoaded', e => {
+        // Get html element references
         let grad = document.getElementById('gradient')
         let h1 = document.querySelector('h1')
 
-        // Create two gradients each with 100 steps
-        let gradient1 = colorizer.gradient.between(colorizer.color.black, colorizer.color.white)
-        let gradient2 = colorizer.gradient.between(colorizer.color.rgb(255, 0, 0, 0), colorizer.color.black)
+        // Create three gradients each with 100 steps
+        let gradient1 = colorshop.gradient.grayscale()
+        let gradient2 = colorshop.gradient.between(colorshop.color.white, colorshop.color.coral)
+        let gradient3 = colorshop.gradient.between(colorshop.color.red, colorshop.color.rgb(0, 0, 255, 0))
+
+        let str = ''
+        for (let i = 0; i < 5000; i++) {
+          str += `<div style="background-color:${gradient3.evaluate(i / 5000).toRGBA()}"></div>`
+        }
+        grad.innerHTML = str
 
         // Initialize the colors
         setBackgroundColor()
@@ -38,8 +58,8 @@
         document.addEventListener('scroll', setBackgroundColor)
 
         function setBackgroundColor() {
-          // Get the scroll offset
-          let offset = (window.innerHeight + window.scrollY) / document.body.offsetHeight
+          // // Get the scroll offset
+          let offset = window.scrollY / (document.body.offsetHeight - window.innerHeight)
           // Update the background color from gradient1
           document.body.style.backgroundColor = gradient1.evaluate(offset)
           // Update the text color from gradient2

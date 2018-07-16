@@ -6,7 +6,7 @@ interface ColorAverage {
   alpha: number
 }
 
-namespace colorizer.filters {
+namespace colorshop.filters {
 
   export class autoColor extends image {
 

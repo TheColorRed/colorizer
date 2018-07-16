@@ -1,4 +1,4 @@
-namespace colorizer {
+namespace colorshop {
 
   export class color {
 
@@ -48,7 +48,7 @@ namespace colorizer {
       g = clamp(Math.round(g), 0, 255)
       b = clamp(Math.round(b), 0, 255)
       c._rgba = new RGBA(r, g, b, a)
-      c._hsl = HSL.rgbToHsl(r, g, b)
+      c._hsl = HSL.rgbToHsl(r, g, b, a)
       return c
     }
 
@@ -80,16 +80,15 @@ namespace colorizer {
      * @returns {color}
      * @memberof Color
      */
-    public static hsl(h: number, s: number, l: number): color {
+    public static hsl(h: number, s: number, l: number, a: number = 1): color {
       let c = new color
       h = clamp(h, 0, 360)
       s = clamp(s, 0, 100)
       l = clamp(l, 0, 100)
-      c._rgba = RGBA.hslToRgb(h / 360, s / 100, l / 100)
-      c._hsl = new HSL(h, s, l)
+      c._rgba = RGBA.hslToRgb(h / 360, s / 100, l / 100, a)
+      c._hsl = new HSL(h, s, l, a)
       return c
     }
-
 
     /**
      * Parses a string into a usable color
@@ -104,12 +103,25 @@ namespace colorizer {
      */
     public static parse(color: string) {
       color = color.trim().toLowerCase()
-      if (color.match(/^#/)) return this.hex(color)
-      else if (color.match(/^rgba?/)) {
-        let [r, g, b, a] = color.replace(/^rgba?|\(|\)/ig, '').split(',').map(i => parseInt(i.trim()))
+      // Parse hex color strings
+      if (color.startsWith('#')) return this.hex(color)
+      // Parse rgba color strings
+      else if (color.startsWith('rgba')) {
+        let c = color.replace(/[^0-9,\.]/ig, '').split(',')
+        if (c.length != 4) throw new Error('Invalid rgba, 4 parameters are required')
+        let [r, g, b, a] = c.map(i => parseFloat(i))
         return this.rgb(r, g, b, a)
-      } else if (color.match(/^hsl?/)) {
-        let [h, s, l] = color.replace(/^hsl|\(|\)/ig, '').split(',').map(i => parseInt(i.trim()))
+      }
+      // Parse rgb color strings
+      else if (color.startsWith('rgb')) {
+        let c = color.replace(/[^0-9,\.]/ig, '').split(',')
+        if (c.length != 3) throw new Error('Invalid rgba, 3 parameters are required')
+        let [r, g, b] = c.map(i => parseFloat(i))
+        return this.rgb(r, g, b)
+      }
+      // Parse hsl color strings
+      else if (color.startsWith('hsl')) {
+        let [h, s, l] = color.replace(/[^0-9,\.]/ig, '').split(',').map(i => parseFloat(i))
         return this.hsl(h, s, l)
       }
     }
@@ -164,7 +176,7 @@ namespace colorizer {
      */
     public lighten(percentage: number) {
       let l = clamp01(this.l + (clamp(percentage, 0, 100) / 100))
-      return color.hsl(this.h, this.s, l)
+      return color.hsl(this.h, this.s, l, this.a)
     }
 
     /**
@@ -176,17 +188,17 @@ namespace colorizer {
      */
     public darken(percentage: number) {
       let l = clamp01(this.l - (clamp(percentage, 0, 100) / 100))
-      return color.hsl(this.h, this.s, l)
+      return color.hsl(this.h, this.s, l, this.a)
     }
 
     public saturate(percentage: number) {
-      let s = clamp01(this.s - clamp(percentage, 0, 100))
-      return color.hsl(this.h, s, this.l)
+      let s = clamp01(this.s - clamp(percentage, 0, 100) / 100)
+      return color.hsl(this.h, s, this.l, this.a)
     }
 
     public desaturate(percentage: number) {
-      let s = clamp01(this.s + clamp(percentage, 0, 100))
-      return color.hsl(this.h, s, this.l)
+      let s = clamp01(this.s + clamp(percentage, 0, 100) / 100)
+      return color.hsl(this.h, s, this.l, this.a)
     }
 
     public adjustHue(degrees: number) {
@@ -195,7 +207,7 @@ namespace colorizer {
         h = Math.abs(h - 360)
       else if (h < 0)
         h = Math.abs(360 - h)
-      return color.hsl(Math.round(h), this.s * 100, this.l * 100)
+      return color.hsl(Math.round(h), this.s * 100, this.l * 100, this.a)
     }
 
     public complement() {
@@ -203,12 +215,12 @@ namespace colorizer {
     }
 
     public invert() {
-      return color.rgb(255 - this.red, 255 - this.green, 255 - this.blue)
+      return color.rgb(255 - this.red, 255 - this.green, 255 - this.blue, this.a)
     }
 
     public grayscale() {
       let gray = (this.red + this.green + this.blue) / 3
-      return color.rgb(gray, gray, gray)
+      return color.rgb(gray, gray, gray, this.a)
     }
 
     public mix(color1: color, color2: color, percentage: number = 0.5) {

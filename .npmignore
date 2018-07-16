@@ -1,0 +1,6 @@
+.vscode
+src
+tests
+ecosystem.config.js
+tsconfig.json
+*.tgz

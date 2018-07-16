@@ -1,57 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Color Filter</title>
-  <script src="/colorizer.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', e => {
-      let worker = new Worker('workers/filter.js')
-      /** @type {HTMLSelectElement} */
-      let filter = document.querySelector('#filter')
-      /** @type {HTMLCanvasElement} */
-      let canvas = document.getElementById('image')
-      canvas.width = 1200, canvas.height = 720
-      let ctx = canvas.getContext('2d')
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color Filter</title>
+    <script src="/colorshop.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', e => {
+        let worker = new Worker('workers/filter.js')
+        /** @type {HTMLSelectElement} */
+        let filter = document.querySelector('#filter')
+        /** @type {HTMLCanvasElement} */
+        let canvas = document.getElementById('image')
+        canvas.width = 1200, canvas.height = 720
+        let ctx = canvas.getContext('2d')
 
-      let img = new Image
-      img.src = '/img/dog.jpg'
-      img.addEventListener('load', e => {
-        ctx.drawImage(img, 0, 0)
-        filter.disabled = false
-      })
+        let img = new Image
+        img.src = '/img/dog.jpg'
+        img.addEventListener('load', e => {
+          ctx.drawImage(img, 0, 0)
+          filter.disabled = false
+        })
 
-      worker.addEventListener('message', e => {
-        ctx.putImageData(e.data, 0, 0)
-        filter.disabled = false
-      })
+        worker.addEventListener('message', e => {
+          ctx.putImageData(e.data, 0, 0)
+          filter.disabled = false
+        })
 
-      filter.addEventListener('change', e => {
-        filter.disabled = true
-        let action = filter.value.charAt(0).toLowerCase() + filter.value.slice(1)
-        worker.postMessage({
-          img: ctx.getImageData(0, 0, 1200, 720),
-          action: action
+        filter.addEventListener('change', e => {
+          filter.disabled = true
+          let action = filter.value.charAt(0).toLowerCase() + filter.value.slice(1)
+          worker.postMessage({
+            img: ctx.getImageData(0, 0, 1200, 720),
+            action: action
+          })
         })
       })
-    })
-  </script>
-</head>
+    </script>
+  </head>
 
-<body>
-  <div style="margin-bottom: 20px">
-    Filter Mode:
-    <select id="filter" disabled>
-      <option value="">Select One</option>
-      <option value="AutoColorCorrect">Auto Color Correct</option>
-    </select>
-  </div>
-  <div>
-    <canvas id="image"></canvas>
-  </div>
-</body>
+  <body>
+    <div style="margin-bottom: 20px">
+      Filter Mode:
+      <select id="filter" disabled>
+        <option value="">Select One</option>
+        <option value="AutoColorCorrect">Auto Color Correct</option>
+      </select>
+    </div>
+    <div>
+      <canvas id="image"></canvas>
+    </div>
+  </body>
 
 </html>
