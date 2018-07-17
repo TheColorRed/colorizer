@@ -1,5 +1,5 @@
-self.importScripts('/colorizer.js')
+self.importScripts('/colorshop.js')
 self.addEventListener('message', e => {
-  let img = colorizer.image.createFilter(e.data.img)
+  let img = colorshop.image.createFilter(e.data.img)
   postMessage(img)
 })

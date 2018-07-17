@@ -14,12 +14,13 @@
         let filter = document.querySelector('#filter')
         /** @type {HTMLCanvasElement} */
         let canvas = document.getElementById('image')
-        canvas.width = 1200, canvas.height = 720
+        // canvas.width = 1200, canvas.height = 720
         let ctx = canvas.getContext('2d')
 
         let img = new Image
         img.src = '/img/dog.jpg'
         img.addEventListener('load', e => {
+          canvas.width = img.width, canvas.height = img.height
           ctx.drawImage(img, 0, 0)
           filter.disabled = false
         })
@@ -33,7 +34,7 @@
           filter.disabled = true
           let action = filter.value.charAt(0).toLowerCase() + filter.value.slice(1)
           worker.postMessage({
-            img: ctx.getImageData(0, 0, 1200, 720),
+            img: ctx.getImageData(0, 0, canvas.width, canvas.height),
             action: action
           })
         })

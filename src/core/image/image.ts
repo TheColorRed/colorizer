@@ -1,22 +1,22 @@
 namespace colorshop {
   export class image {
-    protected _imgdta: ImageData
+    protected _imgDta: ImageData
     protected _dta: Uint8ClampedArray
 
     public get imageData(): ImageData {
-      return this._imgdta
+      return this._imgDta
     }
 
     public constructor(imageData: ImageData) {
-      this._imgdta = imageData
+      this._imgDta = imageData
       this._dta = imageData.data
     }
 
-    // public static createFilter(imgData: ImageData): ImageData {
-    //   let f = new filters.autoColor(imgData)
-    //   f.apply()
-    //   return f._imgdta
-    // }
+    public static createFilter(imgData: ImageData): ImageData {
+      let f = new filters.autoColor(imgData)
+      f.apply()
+      return f._imgDta
+    }
 
     public setColorAtIndex(index: number, color: color) {
       this._dta[index] = color.red
