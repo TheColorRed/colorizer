@@ -7,7 +7,13 @@
     "declaration": true
   },
   "include": [
-    "src/core/**/*.ts",
+    "src/core/util/**/*.ts",
+    "src/core/image/utils/imageUtility.ts",
+    "src/core/image/filters/filter.ts",
+    "src/core/image/image.ts",
+    "src/core/image/analyzer.ts",
+    "src/core/image/**/*.ts",
+    "src/core/color/**/*.ts",
     "src/index.ts"
   ]
 }

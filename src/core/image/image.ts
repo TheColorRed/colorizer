@@ -1,39 +1,35 @@
 namespace colorshop {
+
   export class image {
-    protected _imgDta: ImageData
-    protected _dta: Uint8ClampedArray
+    public analysis!: analysis
+    public imageData: ImageData
+    public channel: util.channel = new util.channel(this)
 
-    public get imageData(): ImageData {
-      return this._imgDta
-    }
-
-    public constructor(imageData: ImageData) {
-      this._imgDta = imageData
-      this._dta = imageData.data
-    }
-
-    public static createFilter(imgData: ImageData): ImageData {
-      let f = new filters.autoColor(imgData)
-      f.apply()
-      return f._imgDta
-    }
-
-    public setColorAtIndex(index: number, color: color) {
-      this._dta[index] = color.red
-      this._dta[index + 1] = color.green
-      this._dta[index + 2] = color.blue
-      this._dta[index + 3] = color.alpha
-    }
-
-    public getColorAtIndex(index: number): color {
-      return color.rgb(this._dta[index], this._dta[index + 1], this._dta[index + 2], this._dta[index + 3])
-    }
-
-    public eachColor(callback: (color: color, index: number) => void) {
-      for (let i = 0, n = this._dta.length; i < n; i += 4) {
-        callback(this.getColorAtIndex(i), i)
+    public constructor(imageData: ImageData | CanvasRenderingContext2D | HTMLCanvasElement) {
+      if (imageData instanceof ImageData) this.imageData = imageData
+      else if (imageData instanceof CanvasRenderingContext2D) this.imageData = imageData.getImageData(0, 0, imageData.canvas.width, imageData.canvas.height)
+      else if (imageData instanceof HTMLCanvasElement) {
+        let ctx = imageData.getContext('2d') as CanvasRenderingContext2D
+        this.imageData = ctx.getImageData(0, 0, imageData.width, imageData.height)
       }
+      else throw new Error('Invalid data. Must either be "ImageData", "CanvasRenderingContext2D" or an "HTMLCanvasElement"')
+      new analyzer(this)
+        .analyze()
+        .then(r => {
+          this.analysis = r
+        })
     }
 
+    public static createFilter(image: image, action: string, options?: any): ImageData {
+      let f: filters.filter
+      switch (action) {
+        case 'autoColorEnhance': f = new filters.autoColorEnhance(image); break
+        case 'autoWhiteBalance': f = new filters.autoWhiteBalance(image); break
+        case 'colorExpress': f = new filters.colorExpress(image); break
+        default: return image.imageData
+      }
+      f.apply(options)
+      return f.data
+    }
   }
 }

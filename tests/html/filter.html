@@ -18,15 +18,18 @@
         let ctx = canvas.getContext('2d')
 
         let img = new Image
-        img.src = '/img/dog.jpg'
+        img.src = '/img/birds.jpg'
+        let csImage
         img.addEventListener('load', e => {
           canvas.width = img.width, canvas.height = img.height
           ctx.drawImage(img, 0, 0)
+          csImage = new colorshop.image(canvas)
           filter.disabled = false
         })
 
         worker.addEventListener('message', e => {
           ctx.putImageData(e.data, 0, 0)
+          // csImage = new colorshop.image(ctx.getImageData(0, 0, canvas.width, canvas.height))
           filter.disabled = false
         })
 
@@ -34,8 +37,9 @@
           filter.disabled = true
           let action = filter.value.charAt(0).toLowerCase() + filter.value.slice(1)
           worker.postMessage({
-            img: ctx.getImageData(0, 0, canvas.width, canvas.height),
-            action: action
+            img: csImage,
+            action: action,
+            options: { min: 0, max: 20 }
           })
         })
       })
@@ -47,7 +51,9 @@
       Filter Mode:
       <select id="filter" disabled>
         <option value="">Select One</option>
-        <option value="AutoColorCorrect">Auto Color Correct</option>
+        <option value="AutoWhiteBalance">Auto White Balance</option>
+        <option value="AutoColorEnhance">Auto Color Enhance</option>
+        <option value="ColorExpress">Color Express</option>
       </select>
     </div>
     <div>
