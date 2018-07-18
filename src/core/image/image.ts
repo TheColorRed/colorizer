@@ -20,16 +20,16 @@ namespace colorshop {
         })
     }
 
-    public static createFilter(image: image, action: string, options?: any): ImageData {
+    public static createFilter(image: image, action: string, options?: any): image {
       let f: filters.filter
       switch (action) {
         case 'autoColorEnhance': f = new filters.autoColorEnhance(image); break
         case 'autoWhiteBalance': f = new filters.autoWhiteBalance(image); break
         case 'colorExpress': f = new filters.colorExpress(image); break
-        default: return image.imageData
+        default: return image
       }
       f.apply(options)
-      return f.data
+      return new colorshop.image(f.data)
     }
   }
 }

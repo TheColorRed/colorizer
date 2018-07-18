@@ -36,11 +36,15 @@
         filter.addEventListener('change', e => {
           filter.disabled = true
           let action = filter.value.charAt(0).toLowerCase() + filter.value.slice(1)
-          worker.postMessage({
-            img: csImage,
-            action: action,
-            options: { min: 0, max: 20 }
-          })
+          let image = colorshop.image.createFilter(csImage, action, {})
+          ctx.putImageData(image.imageData, 0, 0)
+          console.log(image.imageData)
+          filter.disabled = false
+          // worker.postMessage({
+          //   img: csImage,
+          //   action: action,
+          //   options: { min: 0, max: 20 }
+          // })
         })
       })
     </script>
