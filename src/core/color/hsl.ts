@@ -13,6 +13,11 @@ namespace colorshop {
     }
 
     public static rgbToHsl(r: number, g: number, b: number, a: number = 1) {
+      let { h, s, l } = this.getHslFromRgb(r, g, b, a)
+      return new HSL(h * 360, s * 100, l * 100, a)
+    }
+
+    public static getHslFromRgb(r: number, g: number, b: number, a: number = 1) {
       r /= 255, g /= 255, b /= 255
       let max = Math.max(r, g, b), min = Math.min(r, g, b)
       let h: number = 0, s: number, l: number = (max + min) / 2
@@ -29,8 +34,7 @@ namespace colorshop {
         }
         h /= 6
       }
-
-      return new HSL(h * 360, s * 100, l * 100, a)
+      return { h, s, l, a }
     }
   }
 }

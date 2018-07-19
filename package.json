@@ -5,6 +5,7 @@
   "main": "lib/colorshop.js",
   "scripts": {
     "test": "node ./tests/index.js",
+    "build": "tsc -p .",
     "prepublish": "rm -rf ./lib && tsc -p . && uglifyjs ./lib/colorshop.js -m -o ./lib/colorshop.min.js"
   },
   "keywords": [
